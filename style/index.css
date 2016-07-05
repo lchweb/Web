@@ -1,0 +1,33 @@
+/*清零 */
+body,ul,ol,li,p,h1,h2,h3,h4,h5,h6,form,fieldset,table,td,img,div,dl,dt,dd,input{margin:0;padding:0;}
+body{font:12px/18px "MicrosoftYaHei","微软雅黑", "STXihei", "华文细黑", serif;font-weight:normal;}
+img{border:none;}
+ul,li{list-style:none;}
+input,select,textarea{outline:none;}
+textarea{resize:none;}
+a{text-decoration:none;color:#000;}
+
+
+/*样式*/
+/* body{width:100%;height:1920px;background-color:#fffffe;}  */
+
+
+/*遮罩层*/
+div.mask{width:100%;height:100%;position:absolute;z-index:9999;left:0;top:0;opacity:0.8;filter:alpha(opacity=80);background-color:#e9e9ea;}
+div.mask div.m-content{width:40%;height:30%;margin:0 auto;margin-top:400px;}
+div.mask div.m-content p{color:#536384;font-size:2em;line-height:200%;text-align:right;font-family:"楷体";font-style:italic;}
+div.mask div.m-content p:first-child{text-align:left;font-size:4em;}
+
+/*container*/
+div.cantainer{width:100%;margin:0 auto;}
+/*header*/
+div.header{width:100%;height:50px;background-color:#34383c;}
+
+
+/*main*/
+div.main{width:100%;height:850px;background-color:#fff;border:1px solid #000;}
+div.main div.main-left{width:150px;height:100%;background-color:#4d5f84;float:left;}
+div.main div.main-content{width:auto;height:100%;background-color:#acacac;}
+
+
+
