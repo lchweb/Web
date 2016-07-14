@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>JS---圆形时钟</title>
+	<style type="text/css">
+		*{margin:0;padding:0}
+		.canvas{display:block;margin:30px auto;border:1px solid #CCC;}
+	</style>
+</head>
+<body onload="main()">
+<canvas class="canvas" id="canvas" width="500px" height="400px"></canvas>
+
+<script type="text/javascript">
+	
+        function drawClock(width, pad) {
+          'use strict';
+          var size = width || 300;
+          var padding = pad || 40;
+          var canvas = document.getElementById('canvas');
+          var ctx = canvas.getContext('2d');
+          canvas.width = canvas.height = size;
+          var x = size/2, y = size/2;
+          var r = (size - 2*padding) / 2;
+          var drawTime = function () {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.save();
+            ctx.beginPath(); // 绘制辅助线
+            ctx.strokeStyle = '#F2F2F2';
+            ctx.moveTo(0, y+0.5);
+            ctx.lineTo(size, y+0.5);
+            ctx.moveTo(x+0.5, 0);
+            ctx.lineTo(x+0.5, size);
+            ctx.stroke(); // 绘制结束
+            ctx.restore();
+ 
+            ctx.beginPath();
+            ctx.strokeStyle = 'blue'; // 蓝色线条
+            ctx.moveTo(x+r, y);
+            ctx.arc(x, y, r, 0, 2*Math.PI, true); // 中心点、半径，角度 2PI，顺时针
+            ctx.stroke(); // 绘制结束
+ 
+            var fontSize = size/15;
+            ctx.font = fontSize + "px Arial";
+            ctx.textAlign = "center";
+            ctx.fillStyle = "blue";
+            var idg = 2*Math.PI/12; // 360度分成12份
+            var txr = r - fontSize * 0.8; // 在圆弧内测的小圆写文字
+            for(var i=1; i<=12; i++){
+              var rot = i*idg;
+              ctx.fillText(i, x+txr*Math.sin(rot), y-txr*Math.cos(rot)+fontSize/2);
+            }
+            ctx.restore();
+            ctx.save();
+ 
+            var hr = r * 0.55;
+            var mr = r * 0.65;
+            var sr = r * 0.75;  // 时分秒的半径长度，时针hour最短，秒针second最长。
+            var cr = r * 0.68; // 秒针的圆点
+            var rr = 4; // 圆点半径
+            var sr1= r * 0.2;  // 秒针尾巴长度
+            var p2 = 2 * Math.PI;
+            var now = new Date();
+            var seconds = now.getSeconds() + now.getMilliseconds()/1000, minutes = now.getMinutes() + seconds/60,  hour = now.getHours() + minutes/60;
+            var hx = x + hr * Math.sin(hour/12 * p2), hy =  y - hr * Math.cos(hour/12*p2), // 时针x,y
+                mx = x + mr * Math.sin(minutes/60 * p2), my =  y - mr * Math.cos(minutes/60*p2), // 分针x,y
+                sx = x + sr * Math.sin(seconds/60 * p2), sy =  y - sr * Math.cos(seconds/60*p2), // 秒针最大到达的x,y
+                cx = x + (cr - rr) * Math.sin(seconds/60 * p2), cy =  y - (cr - rr) * Math.cos(seconds/60*p2), // 秒针的圆x,y
+                tx = x + cr * Math.sin(seconds/60 * p2), ty =  y - cr * Math.cos(seconds/60*p2), // 秒针开始绘制圆的x,y
+                sx0 = x + (cr - 2*rr) * Math.sin(seconds/60 * p2), sy0 =  y - (cr - 2*rr) * Math.cos(seconds/60*p2), // 秒针到圆圈的长度
+                sx1= x - sr1 * Math.sin(seconds/60 * p2), sy1=  y + sr1 * Math.cos(seconds/60*p2); // 秒针反向绘制的x,y
+ 
+            ctx.beginPath(); // 时针
+            ctx.lineCap = 'round';
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = 'blue';
+            ctx.moveTo(x,y);
+            ctx.lineTo(hx,hy);
+            ctx.stroke();
+            ctx.restore();
+            ctx.save();
+ 
+            ctx.beginPath(); // 分针
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = 'green';
+            ctx.moveTo(x,y);
+            ctx.lineTo(mx,my);
+            ctx.stroke();
+            ctx.restore();
+            ctx.save();
+ 
+            ctx.beginPath(); // 绘制中心小圆
+            ctx.moveTo(x+3, y);
+            ctx.fillStyle = 'blue';
+            ctx.arc(x, y, 6, 0, 2*Math.PI, true); // 中心小圆
+            ctx.fill();
+            ctx.restore();
+            ctx.save();
+ 
+            ctx.beginPath(); // 秒针
+            ctx.strokeStyle = 'red';
+            ctx.moveTo(tx, ty);
+            var lr = seconds < 15 ? (seconds + 45)/60 * p2 : (seconds - 15)/60 * p2;
+            ctx.arc(cx, cy, rr, lr, lr+Math.PI, true); // 绘制下圆弧
+            ctx.moveTo(tx, ty);
+            ctx.arc(cx, cy, rr, lr, lr+Math.PI, false); // 绘制上半圆弧
+            ctx.moveTo(x,y);
+            ctx.lineTo(sx0, sy0);
+            ctx.moveTo(tx,ty);
+            ctx.lineTo(sx, sy);
+            ctx.moveTo(x,y);
+            ctx.lineTo(sx1,sy1);
+            ctx.stroke();
+            ctx.restore();
+            ctx.save();
+ 
+          };
+          drawTime();
+          setInterval(function(){
+            drawTime();
+          }, 100);
+        }
+        window.onload = function(){
+          drawClock();
+        };
+     
+</script>
+</body>
+</html>
